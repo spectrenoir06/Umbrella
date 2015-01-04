@@ -12,6 +12,11 @@ dt 		= 0
 Clients = {}
 
 
+function log(str)
+    print(str)
+
+end
+
 local tcpSocket = assert(socket.bind(ServerIp, ServerTcpPort))
 
 function handler(skt)
@@ -21,7 +26,7 @@ function handler(skt)
   local tcpIp, tcpPort 	= skt.socket:getpeername()
 
   Clients["tcp:"..tcpIp..":"..tcpPort] = {ip = tcpIp, port = tcpPort, skt = skt}
-
+  print("new client:\t\t"..tcpIp..":"..tcpPort)
   local me = Clients["tcp:"..tcpIp..":"..tcpPort]
 
   cl = cl +1
@@ -30,13 +35,21 @@ function handler(skt)
     local data, status, partial = skt:receive()
 
     if data then
-      print(data)
-      if status=="closed" then
-          print(status.." "..tcpIp..":"..tcpPort)
+      print(tcpIp..":"..tcpPort.. " :\t"..data)
+      if (data:sub(0,4) == "cmd:") then
+        for k,v in pairs(Clients) do
+          if (v ~= me) then
+            v.skt:send(data:sub(5).."\n")
+          end
+          me.skt:send("tcp : "..v.ip..":"..v.port.."\n")
+        end
+      end
+    end
+    if status=="closed" then
+      print(status..":\t\t\t"..tcpIp..":"..tcpPort)
           cl=cl-1
           Clients["tcp:"..tcpIp..':'..tcpPort] = nil
           break
-      end
     end
   end
 end
