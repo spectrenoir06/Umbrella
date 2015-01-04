@@ -10,6 +10,7 @@ cl		= 0
 s 	= 0
 dt 		= 0
 Clients = {}
+Admins = {}
 
 
 function log(str)
@@ -24,6 +25,7 @@ function handler(skt)
   skt = copas.wrap(skt)
 
   local tcpIp, tcpPort 	= skt.socket:getpeername()
+  local root = false
 
   Clients["tcp:"..tcpIp..":"..tcpPort] = {ip = tcpIp, port = tcpPort, skt = skt}
   print("new client:\t\t"..tcpIp..":"..tcpPort)
@@ -35,19 +37,36 @@ function handler(skt)
     local data, status, partial = skt:receive()
 
     if data then
-      print(tcpIp..":"..tcpPort.. " :\t"..data)
-      if (data:sub(0,4) == "cmd:") then
+      --print(tcpIp..":"..tcpPort.. " :\t"..data)
+      if (data:sub(0,4) == "root") then
+        Admins["tcp:"..tcpIp..":"..tcpPort] = {ip = tcpIp, port = tcpPort, skt = skt}
+        root = true
+        print("root")
+        for k,v in pairs(Admins) do
+          v.skt:send(v.ip..":"..v.port.." new admin\n")
+        end
+        Clients["tcp:"..tcpIp..':'..tcpPort] = nil
+      elseif(root) then
         for k,v in pairs(Clients) do
-          if (v ~= me) then
-            v.skt:send(data:sub(5).."\n")
-          end
-          me.skt:send("tcp : "..v.ip..":"..v.port.."\n")
+          v.skt:send(data.."\n")
+        end
+      elseif (data == "client") then
+        for k,v in pairs(Clients) do
+          print("tcp : "..v.ip..":"..v.port)
+        end
+      else
+        --print(data)
+        for k,v in pairs(Admins) do
+            --print("ADMIN = "..k)
+          --  v.skt:send(me.ip..":"..me.port.." "..data.."\n")
+            v.skt:send(data.."\n")
+
         end
       end
     end
     if status=="closed" then
       print(status..":\t\t\t"..tcpIp..":"..tcpPort)
-          cl=cl-1
+          cl = cl - 1
           Clients["tcp:"..tcpIp..':'..tcpPort] = nil
           break
     end
