@@ -44,7 +44,7 @@ function handler(skt)
                 if (data == "cmd:client") then
                     me.skt:send(tostring(cl).." Clients:".."\n")
                     for k,v in pairs(Clients) do
-                        me.skt:send("tcp : "..v.ip..":"..v.port.."\n")
+                        me.skt:send("tcp : "..v.ip..":"..v.port.." : "..v.login.."@"..v.hostname.."\n")
                     end
                 elseif (data == "cmd:admin") then
                     me.skt:send(tostring(ad).." Admin:".."\n")
@@ -66,6 +66,11 @@ function handler(skt)
                     v.skt:send(v.ip..":"..v.port.." new admin\n")
                 end
                 Clients["tcp:"..tcpIp..':'..tcpPort] = nil
+            elseif (data:sub(0,6) == "login:") then
+                --print(data)
+                data = data:sub(7)
+                me.login, me.hostname = data:match('(.*):(.*)')
+                --print(me.hostname, me.login)
             else  --print(data)
                 for k,v in pairs(Admins) do
                     v.skt:send(data.."\n")

