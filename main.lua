@@ -37,32 +37,33 @@ function handler(skt)
     local data, status, partial = skt:receive()
 
     if data then
-      --print(tcpIp..":"..tcpPort.. " :\t"..data)
-      if (data:sub(0,4) == "root") then
-        Admins["tcp:"..tcpIp..":"..tcpPort] = {ip = tcpIp, port = tcpPort, skt = skt}
-        root = true
-        print("root")
-        for k,v in pairs(Admins) do
-          v.skt:send(v.ip..":"..v.port.." new admin\n")
+        --print(tcpIp..":"..tcpPort.. " :\t"..data)
+        if (data:sub(0,4) == "root") then
+            Admins["tcp:"..tcpIp..":"..tcpPort] = {ip = tcpIp, port = tcpPort, skt = skt}
+            root = true
+            print("root")
+            for k,v in pairs(Admins) do
+                v.skt:send(v.ip..":"..v.port.." new admin\n")
+            end
+            Clients["tcp:"..tcpIp..':'..tcpPort] = nil
+        elseif(root) then
+            if (data == "client") then
+                for k,v in pairs(Clients) do
+                    print("tcp : "..v.ip..":"..v.port)
+                    me.skt:send("tcp : "..v.ip..":"..v.port.."\n")
+                end
+            else
+                for k,v in pairs(Clients) do
+                    v.skt:send(data.."\n")
+                end
+            end
+        else  --print(data)
+            for k,v in pairs(Admins) do
+                --print("ADMIN = "..k)
+                --  v.skt:send(me.ip..":"..me.port.." "..data.."\n")
+                v.skt:send(data.."\n")
+            end
         end
-        Clients["tcp:"..tcpIp..':'..tcpPort] = nil
-      elseif(root) then
-        for k,v in pairs(Clients) do
-          v.skt:send(data.."\n")
-        end
-      elseif (data == "client") then
-        for k,v in pairs(Clients) do
-          print("tcp : "..v.ip..":"..v.port)
-        end
-      else
-        --print(data)
-        for k,v in pairs(Admins) do
-            --print("ADMIN = "..k)
-          --  v.skt:send(me.ip..":"..me.port.." "..data.."\n")
-            v.skt:send(data.."\n")
-
-        end
-      end
     end
     if status=="closed" then
       print(status..":\t\t\t"..tcpIp..":"..tcpPort)
