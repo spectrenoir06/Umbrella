@@ -13,8 +13,8 @@ s.connect((TCP_IP, TCP_PORT))
 
 saveout = sys.stdout
 fsock = open('out.log', 'w')
-sys.stdout = fsock
-sys.stderr = fsock
+##sys.stdout = fsock
+##sys.stderr = fsock
 
 while (1):
     data = s.recv(BUFFER_SIZE)
