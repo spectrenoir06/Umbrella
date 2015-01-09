@@ -46,7 +46,7 @@ function handler(skt)
                     print(data)
                     if (data == "client") then
                         --me.skt:send(tostring(cl).." Clients:".."\n")
-                        me.skt:send("jso:"..json.encode(Clients).."\n")
+                        me.skt:send("jso:lst:"..json.encode(Clients).."\n")
 
 			--for k,v in pairs(Clients) do
                         --    me.skt:send("tcp : "..v.ip..":"..v.port.." : "..v.login.."@"..v.hostname.."\n")
@@ -87,7 +87,7 @@ function handler(skt)
                 --print(me.hostname, me.login)
             else  --print(data)
                 for k,v in pairs(Admins) do
-                    v.skt:send(data.."\n")
+                    v.skt:send("jso:dat:"..json.encode({client = me, data = data}).."\n")
                 end
             end
         end
