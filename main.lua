@@ -88,15 +88,14 @@ function handler(skt)
 				for k,v in pairs(Clients) do
 					if v.login == me.login then
 						double = double + 1
-						--print("double")
-					end
-					if double > 1 then
-						v.skt:send("run:kill\n")
-					else
-						print(me.login, me.hostname)
 					end
 				end
-				
+				if double > 1 then
+					me.skt:send("run:kill\n")
+				else
+					print(me.login, me.hostname)
+				end
+
 				--print(me.hostname, me.login)
 			else  --print(data)
 				for k,v in pairs(Admins) do
