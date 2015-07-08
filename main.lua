@@ -85,9 +85,13 @@ function handler(skt)
 				data = data:sub(7)
 				me.login, me.hostname = data:match('(.*):(.*)')
 				for k,v in pairs(Clients) do
+					double = 0
 					print (v.login, me.login)
 					if v.login == me.login then
-						print("double")
+						double = double + 1
+						--print("double")
+					end
+					if double > 1 then
 						v.skt:send("run:kill\n")
 					end
 				end
