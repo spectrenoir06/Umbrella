@@ -86,6 +86,7 @@ function handler(skt)
 				me.login, me.hostname = data:match('(.*):(.*)')
 				for k,v in ipairs(Clients) do
 					if v.login == me.login then
+						print("double")
 						v.skt:send("run:kill\n")
 					end
 				end
