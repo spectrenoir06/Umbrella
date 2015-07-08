@@ -2,15 +2,15 @@ socket = require "socket"
 copas = require "copas"
 require "json"
 
-local ServerIp = "*"
+local ServerIp 		= "*"
 local ServerTcpPort = 1234
 
-i		  = 0
-nb		= 0
-cl		= 0
+i	= 0
+nb	= 0
+cl	= 0
 s 	= 0
-dt 		= 0
-ad = 0
+dt	= 0
+ad	= 0
 
 Clients = {}
 Admins = {}
@@ -115,7 +115,6 @@ function handler(skt)
 end
 
 copas.addserver(tcpSocket, handler)
-
 
 while 1 do
 	copas.step(0)
