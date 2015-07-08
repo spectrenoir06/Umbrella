@@ -84,8 +84,8 @@ function handler(skt)
 				--print(data)
 				data = data:sub(7)
 				me.login, me.hostname = data:match('(.*):(.*)')
+				double = 0
 				for k,v in pairs(Clients) do
-					double = 0
 					print (v.login, me.login)
 					if v.login == me.login then
 						double = double + 1
