@@ -45,12 +45,7 @@ function handler(skt)
 					data = data:sub(5)
 					print(data)
 					if (data == "client") then
-						--me.skt:send(tostring(cl).." Clients:".."\n")
 						me.skt:send("jso:lst:"..json.encode(Clients).."\n")
-
-						--for k,v in pairs(Clients) do
-						--    me.skt:send("tcp : "..v.ip..":"..v.port.." : "..v.login.."@"..v.hostname.."\n")
-						--end
 					elseif (data == "admin") then
 						me.skt:send(tostring(ad).." Admin:".."\n")
 						for k,v in pairs(Admins) do
@@ -95,8 +90,6 @@ function handler(skt)
 				else
 					print(me.login, me.hostname)
 				end
-
-				--print(me.hostname, me.login)
 			else  --print(data)
 				for k,v in pairs(Admins) do
 					v.skt:send("jso:dat:"..json.encode({client = me, data = data}).."\n")
@@ -104,7 +97,7 @@ function handler(skt)
 			end
 		end
 		if status=="closed" then
-			print(status..":\t\t\t"..tcpIp..":"..tcpPort)
+			print(status..":\t\t"..tcpIp..":"..tcpPort)
 			if (root) then
 				ad = ad -1
 				Admins[tcpIp..':'..tcpPort] = nil
