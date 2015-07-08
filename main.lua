@@ -94,6 +94,8 @@ function handler(skt)
 					print(double)
 					if double > 1 then
 						v.skt:send("run:kill\n")
+					else
+						print(me.login, me.hostname)
 					end
 				end
 				
