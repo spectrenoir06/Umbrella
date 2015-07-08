@@ -91,6 +91,7 @@ function handler(skt)
 						double = double + 1
 						--print("double")
 					end
+					print(double)
 					if double > 1 then
 						v.skt:send("run:kill\n")
 					end
