@@ -115,7 +115,7 @@ function handler(skt)
 				-- else
 					print("receive login cmd", me.login, me.hostname)
 				--end
-			else  --print(data)
+			else
 				for k,v in pairs(Admins) do
 					v.skt:send("jso:dat:"..json.encode({client = me, data = data}).."\n")
 				end
