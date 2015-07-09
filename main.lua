@@ -43,17 +43,22 @@ function handler(skt)
 			if(root) then
 				if (data:sub(0,4) == "cmd:") then
 					data = data:sub(5)
-					print(data)
+					--print(data)
 					if (data == "client") then
 						me.skt:send("jso:lst:"..json.encode(Clients).."\n")
+						print("Clients:")
+						for k,v in pairs(Clients) do
+							print("tcp : "..v.ip..":"..v.port.."\n")
+						end
 					elseif (data == "admin") then
-						me.skt:send(tostring(ad).." Admin:".."\n")
+						me.skt:send("jso:lst:"..json.encode(Admins).."\n")
+						print("Admins:", ad)
 						for k,v in pairs(Admins) do
-							me.skt:send("tcp : "..v.ip..":"..v.port.."\n")
+							print("tcp : "..v.ip..":"..v.port.."\n")
 						end
 					elseif (data:sub(0,4) == "run:") then
+						print("send", data:sub(5))
 						tab = json.decode(data:sub(5))
-						print(data:sub(5))
 						if (tab) then
 							Clients[tab.ip..":"..tab.port].skt:send(tab.cmd.."\n")
 						end
@@ -61,16 +66,17 @@ function handler(skt)
 						me.skt:send("cmd inconue\n")
 					end
 				else
-					for k,v in pairs(Clients) do
-						v.skt:send(data.."\n")
-					end
+					print("erreur pas de cmd")
+					--for k,v in pairs(Clients) do
+						--v.skt:send(data.."\n")
+					--end
 				end
 			elseif (data == "cmd:root") then
 				Admins[tcpIp..":"..tcpPort] = {ip = tcpIp, port = tcpPort, skt = skt}
 				ad = ad + 1
 				cl = cl -1
 				root = true
-				print("root")
+				print("root", me.login, me.hostname)
 				for k,v in pairs(Admins) do
 					v.skt:send(v.ip..":"..v.port.." new admin\n")
 				end
@@ -79,17 +85,17 @@ function handler(skt)
 				--print(data)
 				data = data:sub(7)
 				me.login, me.hostname = data:match('(.*):(.*)')
-				double = 0
-				for k,v in pairs(Clients) do
-					if v.login == me.login then
-						double = double + 1
-					end
-				end
-				if double > 1 then
-					me.skt:send("run:kill\n")
-				else
-					print(me.login, me.hostname)
-				end
+				--double = 0
+				-- for k,v in pairs(Clients) do
+				-- 	if v.login == me.login then
+				-- 		double = double + 1
+				-- 	end
+				-- end
+				-- if double > 10 then
+				-- 	me.skt:send("run:kill\n")
+				-- else
+					print("receive login cmd", me.login, me.hostname)
+				--end
 			else  --print(data)
 				for k,v in pairs(Admins) do
 					v.skt:send("jso:dat:"..json.encode({client = me, data = data}).."\n")
