@@ -110,8 +110,10 @@ function handler(skt)
 				break
 			else
 				cl = cl - 1
+				print("deco:", me.login, me.hostname, me.ip, me.port)
 				for k,v in pairs(Admins) do
-					v.skt:send("jso:"..json.encode(Clients[tcpIp..':'..tcpPort]).."\n")
+					--print()
+					--v.skt:send("jso:"..json.encode(Clients[tcpIp..':'..tcpPort]).."\n")
 				end
 				Clients[tcpIp..':'..tcpPort] = nil
 				break
