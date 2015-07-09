@@ -123,14 +123,14 @@ function handler(skt)
 			end
 		end
 		if status=="closed" then
-			print(status..":\t\t"..tcpIp..":"..tcpPort)
 			if (root) then
+				print("Admin deco:",status, me.login, me.hostname, me.ip, me.port)
 				ad = ad -1
 				Admins[tcpIp..':'..tcpPort] = nil
 				break
 			else
 				cl = cl - 1
-				print("deco:", me.login, me.hostname, me.ip, me.port)
+				print("Client deco:",status, me.login, me.hostname, me.ip, me.port)
 				for k,v in pairs(Admins) do
 					--print()
 					--v.skt:send("jso:"..json.encode(Clients[tcpIp..':'..tcpPort]).."\n")
