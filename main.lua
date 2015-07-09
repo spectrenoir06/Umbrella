@@ -48,7 +48,7 @@ function handler(skt)
 						me.skt:send("jso:lst:"..json.encode(Clients).."\n")
 						print("Clients:", cl)
 						for k,v in pairs(Clients) do
-							print("tcp : "..v.ip..":"..v.port.."\n")
+							print("tcp :", v.ip, v.port, v.login, v.hostname)
 						end
 					elseif (data == "admin") then
 						me.skt:send("jso:lst:"..json.encode(Admins).."\n")
