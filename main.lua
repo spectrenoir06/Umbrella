@@ -67,7 +67,7 @@ function handler(skt)
 					end
 				else
 					if (data == "client") then
-						me.skt:send("jso:lst:"..json.encode(Clients).."\n")
+						--me.skt:send("jso:lst:"..json.encode(Clients).."\n")
 						print("Clients:", cl)
 						for k,v in pairs(Clients) do
 							print("tcp :", v.ip, v.port, v.login, v.hostname)
