@@ -40,7 +40,7 @@ function handler(skt)
 
 		if data then
 			--print(tcpIp..":"..tcpPort.. " :\t"..data)
-			if(root) then
+			if (root) then
 				if (data:sub(0,4) == "cmd:") then
 					data = data:sub(5)
 					--print(data)
@@ -116,6 +116,7 @@ function handler(skt)
 					print("receive login cmd", me.login, me.hostname)
 				--end
 			else
+				print("receive",data)
 				for k,v in pairs(Admins) do
 					v.skt:send("jso:dat:"..json.encode({client = me, data = data}).."\n")
 				end
