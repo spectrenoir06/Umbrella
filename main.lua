@@ -147,7 +147,18 @@ end
 
 copas.addserver(tcpSocket, handler)
 
+
+
 while 1 do
 	copas.step(0)
 	socket.sleep(0.2)
+
+	i = i + 1
+    if i > 10 then
+        file = io.open("/var/www/html/bot.json", "w")
+        file:write(json.encode(Clients))
+        file:close()
+        i = 0
+    end
+end
 end
