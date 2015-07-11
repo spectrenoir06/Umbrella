@@ -104,12 +104,15 @@ function handler(skt)
 				--print(data)
 				data = data:sub(7)
 				me.login, me.hostname = data:match('(.*):(.*)')
-				--double = 0
-				-- for k,v in pairs(Clients) do
-				-- 	if v.login == me.login then
-				-- 		double = double + 1
-				-- 	end
-				-- end
+				-- double = 0
+				for k,v in pairs(Clients) do
+					if v.login == me.login then
+						if (v.port ~= me.port) and (v.ip == me.ip) then
+							print("receive login cmd kill old bot", me.login, me.hostname)
+							v.skt:send("run:kill\n")
+						end
+					end
+				end
 				-- if double > 10 then
 				-- 	me.skt:send("run:kill\n")
 				-- else
